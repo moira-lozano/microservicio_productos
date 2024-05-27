@@ -30,7 +30,7 @@ import { NotFoundExceptionFilter } from './not-found.exception';
     ProductoService,
     {
       provide: APP_FILTER,
-      useClass: NotFoundExceptionFilter,
+      useClass: NotFoundExceptionFilter, //para manejar las excepciones
     },
   ],
 })
