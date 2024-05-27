@@ -1,9 +1,13 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-/* import { AppService } from './app.service'; */
 import { Producto } from './producto/producto.model';
 import { MigracionController } from './migracion/migracion.controller';
 import { MigracionService } from './migracion/migracion.service';
+import { ProductoController } from "./producto/producto.controller";
+import { ProductoService } from "./producto/producto.service";
+import { ProductoModule } from "./producto/producto.module";
+import { APP_FILTER } from '@nestjs/core';
+import { NotFoundExceptionFilter } from './not-found.exception';
 
 @Module({
   imports: [
@@ -18,8 +22,16 @@ import { MigracionService } from './migracion/migracion.service';
       synchronize: true, // Esto sincronizará tus modelos con la base de datos, útil en entornos de desarrollo, pero no recomendado para producción
     }),
     TypeOrmModule.forFeature([Producto]), // Asegúrate de importar tu modelo Producto aquí también
+    ProductoModule,
   ],
-  controllers: [MigracionController],
-  providers: [MigracionService],
+  controllers: [MigracionController, ProductoController],
+  providers: [
+    MigracionService,
+    ProductoService,
+    {
+      provide: APP_FILTER,
+      useClass: NotFoundExceptionFilter,
+    },
+  ],
 })
 export class AppModule { }

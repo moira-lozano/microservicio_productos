@@ -12,7 +12,7 @@ export class MigracionService {
 
   async migrarDatos(data: any[]): Promise<void> {
     
-    console.log("Estos son los datas: ",data);
+    //console.log("Estos son los datas: ",data);
 
     if (!Array.isArray(data)) {
       throw new Error('Los datos deben ser un array');

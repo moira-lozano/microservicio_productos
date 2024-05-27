@@ -5,6 +5,7 @@ import { Producto } from './producto.model';
 
 @Injectable()
 export class ProductoService {
+ 
   constructor(
     @InjectRepository(Producto) 
     private readonly productRepository: Repository<Producto>,
