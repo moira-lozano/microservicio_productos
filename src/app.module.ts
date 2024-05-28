@@ -1,13 +1,16 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Producto } from './producto/producto.model';
-import { MigracionController } from './migracion/migracion.controller';
-import { MigracionService } from './migracion/migracion.service';
 import { ProductoController } from "./producto/producto.controller";
 import { ProductoService } from "./producto/producto.service";
 import { ProductoModule } from "./producto/producto.module";
 import { APP_FILTER } from '@nestjs/core';
 import { NotFoundExceptionFilter } from './not-found.exception';
+import { CompraModule } from './compra/compra.module';
+import { CompraController } from './compra/compra.controller';
+import { CompraService } from './compra/compra.service';
+import { Compra } from "./compra/compra.model";
+import { CompraDetalleModule } from './compra_detalle/compra_detalle.module';
 
 @Module({
   imports: [
@@ -18,16 +21,16 @@ import { NotFoundExceptionFilter } from './not-found.exception';
       username: 'postgres', 
       password: 'moira123', 
       database: 'db_microservicio', 
-      entities: [Producto], // Importa tu modelo Producto aquí
-      synchronize: true, // Esto sincronizará tus modelos con la base de datos, útil en entornos de desarrollo, pero no recomendado para producción
+      entities: [Producto, Compra], // Importa tu modelo Producto aquí
+      synchronize: true,
     }),
-    TypeOrmModule.forFeature([Producto]), // Asegúrate de importar tu modelo Producto aquí también
-    ProductoModule,
+    TypeOrmModule.forFeature([Producto, Compra]), // Asegúrate de importar tu modelo Producto aquí también
+    ProductoModule, CompraModule, CompraDetalleModule,
   ],
-  controllers: [MigracionController, ProductoController],
+  controllers: [ProductoController, CompraController],
   providers: [
-    MigracionService,
     ProductoService,
+    CompraService,
     {
       provide: APP_FILTER,
       useClass: NotFoundExceptionFilter, //para manejar las excepciones

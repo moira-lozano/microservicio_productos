@@ -2,7 +2,7 @@
 
 import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
 
-@Entity() // Esta línea indica que esta clase representa una entidad en la base de datos [gsql]
+@Entity() // Esta línea indica que esta clase representa una entidad en la base de datos pgsql
 export class Producto {
   @PrimaryGeneratedColumn()
   id: number;
