@@ -15,30 +15,37 @@ import { CompraDetalle } from "./compra_detalle/compra_detalle.model";
 import { CompraDetalleService } from "./compra_detalle/compra_detalle.service";
 import { CompraDetalleController } from "./compra_detalle/compra_detalle.controller";
 
-
 @Module({
   imports: [
-    TypeOrmModule.forRoot({
-      type: 'postgres', 
-      host: 'roundhouse.proxy.rlwy.net',
-      port: 43029, 
-      username: 'postgres', 
-      password: 'AHOdagbkustxYPTgKILmzibvUaauxFtE', 
-      database: 'railway', 
-      entities: [Producto, Compra, CompraDetalle], 
-      synchronize: true,
+    TypeOrmModule.forRootAsync({
+      useFactory: () => ({
+        type: 'postgres',
+        host: process.env.DB_HOST,
+        port: parseInt(process.env.DB_PORT),
+        username: process.env.DB_USERNAME,
+        password: process.env.DB_PASSWORD,
+        database: process.env.DB_DATABASE,
+        entities: [Producto, Compra, CompraDetalle],
+        synchronize: true,
+      }),
     }),
-    TypeOrmModule.forFeature([Producto, Compra, CompraDetalle]), // Asegúrate de importar tu modelo Producto aquí también
-    ProductoModule, CompraModule, CompraDetalleModule,
+    TypeOrmModule.forFeature([Producto, Compra, CompraDetalle]),
+    ProductoModule,
+    CompraModule,
+    CompraDetalleModule,
   ],
-  controllers: [ProductoController, CompraController, CompraDetalleController],
+  controllers: [
+    ProductoController,
+    CompraController,
+    CompraDetalleController,
+  ],
   providers: [
     ProductoService,
     CompraService,
     CompraDetalleService,
     {
       provide: APP_FILTER,
-      useClass: NotFoundExceptionFilter, //para manejar las excepciones
+      useClass: NotFoundExceptionFilter,
     },
   ],
 })
