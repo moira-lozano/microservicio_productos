@@ -17,12 +17,12 @@ export class ProductoController {
     async findOne(@Param('id') id: number): Promise<Producto> {
       const productos_por_id = await this.productosService.findOne(id);
       if (!productos_por_id) {
-        throw new NotFoundException("The product does not exist");
+        throw new NotFoundException("This product does not exist");
       }
       return productos_por_id;
     }
   
-    @Post()
+    @Post('/crear')
     async create(@Body() product: Producto): Promise<Producto> {
       return this.productosService.create(product);
     }
@@ -37,7 +37,7 @@ export class ProductoController {
       try {
         return await this.productosService.remove(id);
       } catch (error) {
-        throw new NotFoundException("The product does not exist");
+        throw new NotFoundException("This product does not exist");
         
       }
     }
