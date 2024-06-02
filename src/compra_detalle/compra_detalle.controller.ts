@@ -15,7 +15,7 @@ export class CompraDetalleController {
     async findOne(@Param('id') id: number): Promise<CompraDetalle> {
       const compras_por_id = await this.compraDetalleService.findOne(id);
       if (!compras_por_id) {
-        throw new NotFoundException("Purchase details does not exist");
+        throw new NotFoundException("Purchase details do not exist");
       }
       return compras_por_id;
     }
@@ -35,7 +35,7 @@ export class CompraDetalleController {
       try {
         return await this.compraDetalleService.remove(id);
       } catch (error) {
-        throw new NotFoundException("Purchase details does not exist");
+        throw new NotFoundException("Purchase details do not exist");
         
       }
     }
