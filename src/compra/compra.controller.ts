@@ -1,7 +1,9 @@
 import { Controller, Get, Post, Body, Param, Put, Delete, NotFoundException } from '@nestjs/common';
 import { CompraService } from "./compra.service";
 import { Compra } from "./compra.model";
+import { ApiTags } from '@nestjs/swagger';
 
+@ApiTags('compra')
 @Controller('compra')
 export class CompraController {
     constructor (private compraService: CompraService) {}
