@@ -15,16 +15,17 @@ import { CompraDetalle } from "./compra_detalle/compra_detalle.model";
 import { CompraDetalleService } from "./compra_detalle/compra_detalle.service";
 import { CompraDetalleController } from "./compra_detalle/compra_detalle.controller";
 
+
 @Module({
   imports: [
     TypeOrmModule.forRoot({
       type: 'postgres', 
-      host: 'localhost',
-      port: 5432, 
+      host: 'roundhouse.proxy.rlwy.net',
+      port: 43029, 
       username: 'postgres', 
-      password: 'moira123', 
-      database: 'db_microservicio', 
-      entities: [Producto, Compra, CompraDetalle], // Importa tu modelo Producto aquí
+      password: 'AHOdagbkustxYPTgKILmzibvUaauxFtE', 
+      database: 'railway', 
+      entities: [Producto, Compra, CompraDetalle], 
       synchronize: true,
     }),
     TypeOrmModule.forFeature([Producto, Compra, CompraDetalle]), // Asegúrate de importar tu modelo Producto aquí también

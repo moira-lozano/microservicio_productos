@@ -50,9 +50,10 @@ export class ProductoService {
   async update(id: number, product: Producto): Promise<Producto> { 
     await this.productRepository.update(id, product);
     return this.productRepository.findOne({ where: { id } });
-  }
+  } 
 
   async remove(id: number): Promise<void> {
     await this.productRepository.delete(id);
   }
+
 }

@@ -4,6 +4,7 @@ import { ProductoService } from './producto.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Producto } from './producto.model';
 
+
 @Module({
   imports: [
     TypeOrmModule.forFeature([Producto])

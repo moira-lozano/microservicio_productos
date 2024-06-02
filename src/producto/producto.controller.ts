@@ -20,7 +20,7 @@ export class ProductoController {
       return productos_por_id;
     }
   
-    @Post()
+    @Post('/crear')
     async create(@Body() product: Producto): Promise<Producto> {
       return this.productosService.create(product);
     }
