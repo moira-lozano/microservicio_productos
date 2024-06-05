@@ -1,13 +1,13 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { PurchaseDetails } from "./purchase_details.model";
+import { PurchaseDetail } from "./purchase_detail.model";
 
 @Injectable()
-export class PurchaseDetailsService {
+export class PurchaseDetailService {
     constructor(
-        @InjectRepository(PurchaseDetails) 
-        private readonly purchaseDetailsRepository: Repository<PurchaseDetails>,
+        @InjectRepository(PurchaseDetail) 
+        private readonly purchaseDetailsRepository: Repository<PurchaseDetail>,
       ) {}
 
       async migrarDatosCompra(data: any[]): Promise<void> {
@@ -18,7 +18,7 @@ export class PurchaseDetailsService {
       
         // Iterar sobre los datos y guardarlos en la base de datos
         for (const item of data) {
-          const compra_detalle = new PurchaseDetails();
+          const compra_detalle = new PurchaseDetail();
           compra_detalle.quantity = item.quantity;
           compra_detalle.cost = item.cost;
           compra_detalle.total = item.total;
@@ -29,21 +29,23 @@ export class PurchaseDetailsService {
         }
       }
 
-      async findAll(): Promise<PurchaseDetails[]> { 
+      async findAll(): Promise<PurchaseDetail[]> { 
         return await this.purchaseDetailsRepository.find();
       }
-    
-      async findOne(id: number): Promise<PurchaseDetails> {
-        return await this.purchaseDetailsRepository.findOne({ where: { id } });
+
+      async findOne(id: number): Promise<PurchaseDetail | null> {
+        const compraDetalles = await this.purchaseDetailsRepository.findOne({ where: { id } });
+        return compraDetalles || null;
       }
       
-      async create(purchase: PurchaseDetails): Promise<PurchaseDetails> { 
+      async create(purchase: PurchaseDetail): Promise<PurchaseDetail> { 
         return await this.purchaseDetailsRepository.save(purchase);
       }
     
-      async update(id: number, purchase: PurchaseDetails): Promise<PurchaseDetails> { 
+      async update(id: number, purchase: PurchaseDetail): Promise<PurchaseDetail | null> { 
         await this.purchaseDetailsRepository.update(id, purchase);
-        return this.purchaseDetailsRepository.findOne({ where: { id } });
+        const updatedPurchaseDetail = await this.purchaseDetailsRepository.findOne({ where: { id } });
+        return updatedPurchaseDetail || null;
       }
     
       async remove(id: number): Promise<void> {

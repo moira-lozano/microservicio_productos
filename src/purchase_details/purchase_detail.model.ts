@@ -1,24 +1,24 @@
 import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
 
 @Entity()
-export class PurchaseDetails {
+export class PurchaseDetail {
    
    @PrimaryGeneratedColumn()
-   id: number;
+   id!: number;
 
    @Column()
-   quantity: number;
+   quantity!: number;
 
    @Column('real')
-   cost: number;
+   cost!: number;
 
    @Column('real')
-   total: number;
+   total!: number;
 
    @Column()
-   purchase_id: number;
+   purchase_id!: number;
 
    @Column()
-   product_id: number;
+   product_id!: number;
 
 }

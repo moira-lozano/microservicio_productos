@@ -1,21 +1,21 @@
 import { Module } from '@nestjs/common';
-import { PurchaseDetails } from "./purchase_details.model";
-import { PurchaseDetailsService } from './purchase_details.service';
-import { PurchaseDetailsController } from './purchase_details.controller';
+import { PurchaseDetail } from "./purchase_detail.model";
+import { PurchaseDetailService } from './purchase_detail.service';
+import { PurchaseDetailController } from './purchase_detail.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([PurchaseDetails])
+    TypeOrmModule.forFeature([PurchaseDetail])
   ],
-  providers: [PurchaseDetailsService],
-  controllers: [PurchaseDetailsController]
+  providers: [PurchaseDetailService],
+  controllers: [PurchaseDetailController]
 })
-export class PurchaseDetailsModule {
-    id: number;
-    quantity: number;
-    cost: number;
-    total: number;
-    purchase_id: number;
-    product_id: number;
+export class PurchaseDetailModule {
+    id: number = 0;
+    quantity: number = 0;
+    cost: number = 0;
+    total: number = 0;
+    purchase_id: number = 0;
+    product_id: number = 0;
 }

@@ -1,18 +1,18 @@
 import { Controller, Get, Post, Body, Param, Put, Delete, NotFoundException } from '@nestjs/common';
-import { ProductsService } from "./products.service";
-import { Products } from './products.model';
+import { ProductService } from "./product.service";
+import { Product } from './product.model';
 
 @Controller('producto')
-export class ProductsController {
-    constructor (private productosService: ProductsService) {}
+export class ProductController {
+    constructor (private productosService: ProductService) {}
 
     @Get('/ver')
-    async findAll(): Promise<Products[]> {
+    async findAll(): Promise<Product[]> {
       return this.productosService.findAll();
     }    
   
     @Get(':id')
-    async findOne(@Param('id') id: number): Promise<Products> {
+    async findOne(@Param('id') id: number): Promise<Product> {
       const productos_por_id = await this.productosService.findOne(id);
       if (!productos_por_id) {
         throw new NotFoundException("This product does not exist");
@@ -21,13 +21,14 @@ export class ProductsController {
     }
   
     @Post('/crear')
-    async create(@Body() product: Products): Promise<Products> {
+    async create(@Body() product: Product): Promise<Product> {
       return this.productosService.create(product);
     }
   
     @Put(':id')
-    async update(@Param('id') id: number, @Body() product: Products): Promise<Products> {
-      return this.productosService.update(id, product);
+    async update(@Param('id') id: number, @Body() product: Product): Promise<Product | null> {
+      const updatedProduct = await this.productosService.update(id, product);
+      return updatedProduct !== null ? updatedProduct : null;
     }
   
     @Delete(':id')

@@ -1,25 +1,25 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { Products } from './products.model'; 
+import { Product } from './product.model';
 
 @Injectable()
-export class ProductsService {
- 
+export class ProductService {
+
   constructor(
-    @InjectRepository(Products) 
-    private readonly productRepository: Repository<Products>,
-  ) {}
+    @InjectRepository(Product)
+    private readonly productRepository: Repository<Product>,
+  ) { }
 
   async migrarDatos(data: any[]): Promise<void> {
 
     if (!Array.isArray(data)) {
       throw new Error('Los datos deben ser un array');
     }
-  
+
     // Iterar sobre los datos y guardarlos en la base de datos
     for (const item of data) {
-      const producto = new Products();
+      const producto = new Product();
       producto.code = item.code;
       producto.name = item.name;
       producto.description = item.description;
@@ -30,27 +30,30 @@ export class ProductsService {
       producto.size_id = item.size_id;
       producto.color_id = item.color_id;
       producto.model_id = item.model_id;
-  
+
       await this.productRepository.save(producto);
     }
   }
 
-  async findAll(): Promise<Products[]> { 
+  async findAll(): Promise<Product[]> {
     return await this.productRepository.find();
   }
 
-  async findOne(id: number): Promise<Products> {
-    return await this.productRepository.findOne({ where: { id } });
+  async findOne(id: number): Promise<Product | null> {
+    const product = await this.productRepository.findOne({ where: { id } });
+    return product || null; // Asegura que nunca se retorne null
   }
-  
-  async create(product: Products): Promise<Products> { 
+
+  async create(product: Product): Promise<Product> {
     return await this.productRepository.save(product);
   }
 
-  async update(id: number, product: Products): Promise<Products> { 
+  async update(id: number, product: Product): Promise<Product | null> {
     await this.productRepository.update(id, product);
-    return this.productRepository.findOne({ where: { id } });
-  } 
+    const updatedProduct = await this.productRepository.findOne({ where: { id } });
+    return updatedProduct || null;
+  }
+  
 
   async remove(id: number): Promise<void> {
     await this.productRepository.delete(id);

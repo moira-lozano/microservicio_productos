@@ -1,16 +1,16 @@
 import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
 
 @Entity()
-export class Purchases {
+export class Purchase {
   @PrimaryGeneratedColumn()
-  id: number;
+  id!: number;
 
   @Column()
-  date: Date; 
+  date!: Date; 
 
   @Column('real')
-  total: number;
+  total!: number;
 
   @Column()
-  supplier_id: number;
+  supplier_id!: number;
 }

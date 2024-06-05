@@ -3,38 +3,38 @@
 import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
 
 @Entity() // Esta línea indica que esta clase representa una entidad en la base de datos pgsql
-export class Products {
+export class Product {
   @PrimaryGeneratedColumn()
-  id: number;
+  id!: number;
 
   @Column()
-  code: string;  
+  code!: string;  
   
   @Column()
-  name: string;
+  name!: string;
 
   @Column()
-  description: string;
+  description!: string;
 
   @Column('real')
-  price: number;
+  price!: number;
 
   @Column()
-  stock: number;
+  stock!: number;
 
   @Column()
-  image: string;
+  image!: string;
 
   @Column()
-  brand_id: number;
+  brand_id!: number;
 
   @Column()
-  size_id: number;
+  size_id!: number;
 
   @Column()
-  color_id: number;
+  color_id!: number;
 
   @Column()
-  model_id: number;
+  model_id!: number;
 
 }
