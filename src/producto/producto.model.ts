@@ -25,6 +25,8 @@ export class Producto {
   @Column()
   image: string;
 
+
+  
   @Column()
   brand_id: number;
 
