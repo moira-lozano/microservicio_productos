@@ -1,13 +1,13 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { Compra } from "./compra.model";
+import { Purchases } from "./purchases.model";
 
 @Injectable()
-export class CompraService {
+export class PurchasesService {
     constructor(
-        @InjectRepository(Compra) 
-        private readonly purchaseRepository: Repository<Compra>,
+        @InjectRepository(Purchases) 
+        private readonly purchaseRepository: Repository<Purchases>,
       ) {}
 
       async migrarDatosCompra(data: any[]): Promise<void> {
@@ -18,7 +18,7 @@ export class CompraService {
       
         // Iterar sobre los datos y guardarlos en la base de datos
         for (const item of data) {
-          const compra = new Compra();
+          const compra = new Purchases();
           compra.date = item.date;
           compra.total = item.total;
           compra.supplier_id = item.supplier_id;
@@ -27,19 +27,19 @@ export class CompraService {
         }
       }
 
-      async findAll(): Promise<Compra[]> { 
+      async findAll(): Promise<Purchases[]> { 
         return await this.purchaseRepository.find();
       }
     
-      async findOne(id: number): Promise<Compra> {
+      async findOne(id: number): Promise<Purchases> {
         return await this.purchaseRepository.findOne({ where: { id } });
       }
       
-      async create(purchase: Compra): Promise<Compra> { 
+      async create(purchase: Purchases): Promise<Purchases> { 
         return await this.purchaseRepository.save(purchase);
       }
     
-      async update(id: number, purchase: Compra): Promise<Compra> { 
+      async update(id: number, purchase: Purchases): Promise<Purchases> { 
         await this.purchaseRepository.update(id, purchase);
         return this.purchaseRepository.findOne({ where: { id } });
       }

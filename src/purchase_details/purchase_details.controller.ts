@@ -1,18 +1,18 @@
 import { Controller, Get, Post, Body, Param, Put, Delete, NotFoundException } from '@nestjs/common';
-import { CompraDetalleService} from "./compra_detalle.service";
-import { CompraDetalle } from "./compra_detalle.model";
+import { PurchaseDetailsService} from "./purchase_details.service";
+import { PurchaseDetails } from "./purchase_details.model";
 
 @Controller('compra-detalle')
-export class CompraDetalleController {
-    constructor (private compraDetalleService: CompraDetalleService) {}
+export class PurchaseDetailsController {
+    constructor (private compraDetalleService: PurchaseDetailsService) {}
 
     @Get()
-    async findAll(): Promise<CompraDetalle[]> {
+    async findAll(): Promise<PurchaseDetails[]> {
       return this.compraDetalleService.findAll();
     }    
   
     @Get(':id')
-    async findOne(@Param('id') id: number): Promise<CompraDetalle> {
+    async findOne(@Param('id') id: number): Promise<PurchaseDetails> {
       const compras_por_id = await this.compraDetalleService.findOne(id);
       if (!compras_por_id) {
         throw new NotFoundException("Purchase details do not exist");
@@ -21,12 +21,12 @@ export class CompraDetalleController {
     }
   
     @Post()
-    async create(@Body() purchase: CompraDetalle): Promise<CompraDetalle> {
+    async create(@Body() purchase: PurchaseDetails): Promise<PurchaseDetails> {
       return this.compraDetalleService.create(purchase);
     }
   
     @Put(':id')
-    async update(@Param('id') id: number, @Body() purchase: CompraDetalle): Promise<CompraDetalle> {
+    async update(@Param('id') id: number, @Body() purchase: PurchaseDetails): Promise<PurchaseDetails> {
       return this.compraDetalleService.update(id, purchase);
     }
   

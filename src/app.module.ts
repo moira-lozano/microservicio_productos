@@ -1,19 +1,19 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { Producto } from './producto/producto.model';
-import { ProductoController } from "./producto/producto.controller";
-import { ProductoService } from "./producto/producto.service";
-import { ProductoModule } from "./producto/producto.module";
+import { Products } from './products/products.model';
+import { ProductsController } from "./products/products.controller";
+import { ProductsService } from "./products/products.service";
+import { ProductsModule } from "./products/products.module";
 import { APP_FILTER } from '@nestjs/core';
 import { NotFoundExceptionFilter } from './not-found.exception';
-import { CompraModule } from './compra/compra.module';
-import { CompraController } from './compra/compra.controller';
-import { CompraService } from './compra/compra.service';
-import { Compra } from "./compra/compra.model";
-import { CompraDetalleModule } from './compra_detalle/compra_detalle.module';
-import { CompraDetalle } from "./compra_detalle/compra_detalle.model";
-import { CompraDetalleService } from "./compra_detalle/compra_detalle.service";
-import { CompraDetalleController } from "./compra_detalle/compra_detalle.controller";
+import { PurchasesModule } from './purchases/purchases.module';
+import { PurchasesController } from './purchases/purchases.controller';
+import { PurchasesService } from './purchases/purchases.service';
+import { Purchases } from "./purchases/purchases.model";
+import { PurchaseDetailsModule } from './purchase_details/purchase_details.module';
+import { PurchaseDetails } from "./purchase_details/purchase_details.model";
+import { PurchaseDetailsService } from "./purchase_details/purchase_details.service";
+import { PurchaseDetailsController } from "./purchase_details/purchase_details.controller";
 import { ConfigModule, ConfigService } from '@nestjs/config';
 
 @Module({
@@ -31,7 +31,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
         password: configService.get('DB_PASSWORD'),
         database: configService.get('DB_DATABASE'),
         //entities: ['dist/src/**/*.entity{.ts,.js}'],
-        entities: [Producto, Compra, CompraDetalle],
+        entities: [Products, Purchases, PurchaseDetails],
         logging: true,
         autoLoadEntities: true,
         synchronize: true,
@@ -42,20 +42,20 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
       }),
       inject: [ConfigService],
     }),
-    TypeOrmModule.forFeature([Producto, Compra, CompraDetalle]),
-    ProductoModule,
-    CompraModule,
-    CompraDetalleModule,
+    TypeOrmModule.forFeature([Products, Purchases, PurchaseDetails]),
+    ProductsModule,
+    PurchasesModule,
+    PurchaseDetailsModule,
   ],
   controllers: [
-    ProductoController,
-    CompraController,
-    CompraDetalleController,
+    ProductsController,
+    PurchasesController,
+    PurchaseDetailsController,
   ],
   providers: [
-    ProductoService,
-    CompraService,
-    CompraDetalleService,
+    ProductsService,
+    PurchasesService,
+    PurchaseDetailsService,
     {
       provide: APP_FILTER,
       useClass: NotFoundExceptionFilter,

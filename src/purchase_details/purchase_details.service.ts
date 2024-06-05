@@ -1,13 +1,13 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { CompraDetalle } from "./compra_detalle.model";
+import { PurchaseDetails } from "./purchase_details.model";
 
 @Injectable()
-export class CompraDetalleService {
+export class PurchaseDetailsService {
     constructor(
-        @InjectRepository(CompraDetalle) 
-        private readonly purchaseDetailsRepository: Repository<CompraDetalle>,
+        @InjectRepository(PurchaseDetails) 
+        private readonly purchaseDetailsRepository: Repository<PurchaseDetails>,
       ) {}
 
       async migrarDatosCompra(data: any[]): Promise<void> {
@@ -18,7 +18,7 @@ export class CompraDetalleService {
       
         // Iterar sobre los datos y guardarlos en la base de datos
         for (const item of data) {
-          const compra_detalle = new CompraDetalle();
+          const compra_detalle = new PurchaseDetails();
           compra_detalle.quantity = item.quantity;
           compra_detalle.cost = item.cost;
           compra_detalle.total = item.total;
@@ -29,19 +29,19 @@ export class CompraDetalleService {
         }
       }
 
-      async findAll(): Promise<CompraDetalle[]> { 
+      async findAll(): Promise<PurchaseDetails[]> { 
         return await this.purchaseDetailsRepository.find();
       }
     
-      async findOne(id: number): Promise<CompraDetalle> {
+      async findOne(id: number): Promise<PurchaseDetails> {
         return await this.purchaseDetailsRepository.findOne({ where: { id } });
       }
       
-      async create(purchase: CompraDetalle): Promise<CompraDetalle> { 
+      async create(purchase: PurchaseDetails): Promise<PurchaseDetails> { 
         return await this.purchaseDetailsRepository.save(purchase);
       }
     
-      async update(id: number, purchase: CompraDetalle): Promise<CompraDetalle> { 
+      async update(id: number, purchase: PurchaseDetails): Promise<PurchaseDetails> { 
         await this.purchaseDetailsRepository.update(id, purchase);
         return this.purchaseDetailsRepository.findOne({ where: { id } });
       }

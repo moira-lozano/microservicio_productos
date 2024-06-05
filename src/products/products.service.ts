@@ -1,14 +1,14 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { Producto } from './producto.model'; 
+import { Products } from './products.model'; 
 
 @Injectable()
-export class ProductoService {
+export class ProductsService {
  
   constructor(
-    @InjectRepository(Producto) 
-    private readonly productRepository: Repository<Producto>,
+    @InjectRepository(Products) 
+    private readonly productRepository: Repository<Products>,
   ) {}
 
   async migrarDatos(data: any[]): Promise<void> {
@@ -19,7 +19,7 @@ export class ProductoService {
   
     // Iterar sobre los datos y guardarlos en la base de datos
     for (const item of data) {
-      const producto = new Producto();
+      const producto = new Products();
       producto.code = item.code;
       producto.name = item.name;
       producto.description = item.description;
@@ -35,19 +35,19 @@ export class ProductoService {
     }
   }
 
-  async findAll(): Promise<Producto[]> { 
+  async findAll(): Promise<Products[]> { 
     return await this.productRepository.find();
   }
 
-  async findOne(id: number): Promise<Producto> {
+  async findOne(id: number): Promise<Products> {
     return await this.productRepository.findOne({ where: { id } });
   }
   
-  async create(product: Producto): Promise<Producto> { 
+  async create(product: Products): Promise<Products> { 
     return await this.productRepository.save(product);
   }
 
-  async update(id: number, product: Producto): Promise<Producto> { 
+  async update(id: number, product: Products): Promise<Products> { 
     await this.productRepository.update(id, product);
     return this.productRepository.findOne({ where: { id } });
   } 

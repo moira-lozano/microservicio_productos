@@ -1,18 +1,18 @@
 import { Controller, Get, Post, Body, Param, Put, Delete, NotFoundException } from '@nestjs/common';
-import { ProductoService } from "./producto.service";
-import { Producto } from './producto.model';
+import { ProductsService } from "./products.service";
+import { Products } from './products.model';
 
 @Controller('producto')
-export class ProductoController {
-    constructor (private productosService: ProductoService) {}
+export class ProductsController {
+    constructor (private productosService: ProductsService) {}
 
     @Get('/ver')
-    async findAll(): Promise<Producto[]> {
+    async findAll(): Promise<Products[]> {
       return this.productosService.findAll();
     }    
   
     @Get(':id')
-    async findOne(@Param('id') id: number): Promise<Producto> {
+    async findOne(@Param('id') id: number): Promise<Products> {
       const productos_por_id = await this.productosService.findOne(id);
       if (!productos_por_id) {
         throw new NotFoundException("This product does not exist");
@@ -21,12 +21,12 @@ export class ProductoController {
     }
   
     @Post('/crear')
-    async create(@Body() product: Producto): Promise<Producto> {
+    async create(@Body() product: Products): Promise<Products> {
       return this.productosService.create(product);
     }
   
     @Put(':id')
-    async update(@Param('id') id: number, @Body() product: Producto): Promise<Producto> {
+    async update(@Param('id') id: number, @Body() product: Products): Promise<Products> {
       return this.productosService.update(id, product);
     }
   
