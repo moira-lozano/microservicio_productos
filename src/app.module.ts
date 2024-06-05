@@ -14,20 +14,32 @@ import { CompraDetalleModule } from './compra_detalle/compra_detalle.module';
 import { CompraDetalle } from "./compra_detalle/compra_detalle.model";
 import { CompraDetalleService } from "./compra_detalle/compra_detalle.service";
 import { CompraDetalleController } from "./compra_detalle/compra_detalle.controller";
+import { ConfigModule, ConfigService } from '@nestjs/config';
 
 @Module({
   imports: [
+    ConfigModule.forRoot({
+      isGlobal: true,
+    }),
     TypeOrmModule.forRootAsync({
-      useFactory: () => ({
+      imports: [ConfigModule],
+      useFactory: async (configService: ConfigService) => ({
         type: 'postgres',
-        host: process.env.DB_HOST,
-        port: parseInt(process.env.DB_PORT),
-        username: process.env.DB_USERNAME,
-        password: process.env.DB_PASSWORD,
-        database: process.env.DB_DATABASE,
-        entities: [Producto, Compra, CompraDetalle],
+        host: configService.get('DB_HOST'),
+        port: configService.get('DB_PORT'),
+        username: configService.get('DB_USERNAME'),
+        password: configService.get('DB_PASSWORD'),
+        database: configService.get('DB_DATABASE'),
+        entities: ['dist/src/**/*.entity{.ts,.js}'],
+        logging: true,
+        autoLoadEntities: true,
         synchronize: true,
+        cache: false,
+        ssl: {
+          rejectUnauthorized: false,
+        }, 
       }),
+      inject: [ConfigService],
     }),
     TypeOrmModule.forFeature([Producto, Compra, CompraDetalle]),
     ProductoModule,
