@@ -10,7 +10,7 @@ export class PurchaseDetailController {
     async findAll(): Promise<PurchaseDetail[]> {
       return this.compraDetalleService.findAll();
     }    
-  
+
     @Get(':id')
     async findOne(@Param('id') id: number): Promise<PurchaseDetail> {
       const compras_por_id = await this.compraDetalleService.findOne(id);
