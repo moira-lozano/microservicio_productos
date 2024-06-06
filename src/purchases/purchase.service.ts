@@ -27,6 +27,8 @@ export class PurchaseService {
         }
       }
 
+
+      
       async findAll(): Promise<Purchase[]> { 
         return await this.purchaseRepository.find();
       }

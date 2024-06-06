@@ -37,11 +37,10 @@ export class ProductController {
         return await this.productosService.remove(id);
       } catch (error) {
         throw new NotFoundException("This product does not exist");
-        
       }
     }
 
-    @Post('/mas-comprados')
+    @Post('/masComprados')
     async obtenerProductosMasCompradosPorTallas(): Promise<any[]>{
       return this.productosService.obtenerProductosMasCompradosPorTallas();  
     }
