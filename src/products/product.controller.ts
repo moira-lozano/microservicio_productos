@@ -10,6 +10,11 @@ export class ProductController {
     async findAll(): Promise<Product[]> {
       return this.productosService.findAll();
     }  
+
+    @Get('/masComprados')
+    async obtenerProductosMasCompradosPorTallas(): Promise<any[]>{
+      return await this.productosService.obtenerProductosMasCompradosPorTallas();  
+    }
   
     @Get(':id')
     async findOne(@Param('id') id: number): Promise<Product> {
@@ -39,10 +44,4 @@ export class ProductController {
         throw new NotFoundException("This product does not exist");
       }
     }
-
-    @Get('/masComprados')
-    async obtenerProductosMasCompradosPorTallas(): Promise<any[]>{
-      return await this.productosService.obtenerProductosMasCompradosPorTallas();  
-    }
-    
 }
