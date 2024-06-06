@@ -10,7 +10,7 @@ export class PurchaseDetail {
    quantity!: number;
 
    @Column('real')
-   cost!: number;
+   price!: number;
 
    @Column('real')
    total!: number;

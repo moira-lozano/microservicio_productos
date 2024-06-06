@@ -14,7 +14,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 export class PurchaseDetailModule {
     id: number = 0;
     quantity: number = 0;
-    cost: number = 0;
+    price: number = 0;
     total: number = 0;
     purchase_id: number = 0;
     product_id: number = 0;
