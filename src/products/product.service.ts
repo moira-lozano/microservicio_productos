@@ -98,7 +98,7 @@ export class ProductService {
       JOIN 
         sizes ON product.size_id = sizes.id
       WHERE 
-        sizes.name = XS
+        sizes.name = $1
       ORDER BY 
         purchase_detail.quantity DESC
       LIMIT 50;
