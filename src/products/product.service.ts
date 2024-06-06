@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { Repository, DataSource } from 'typeorm';
 import { Product } from './product.model';
 
 @Injectable()
@@ -9,6 +9,7 @@ export class ProductService {
   constructor(
     @InjectRepository(Product)
     private readonly productRepository: Repository<Product>,
+    private readonly dataSource: DataSource
   ) { }
 
   async migrarDatos(data: any[]): Promise<void> {
@@ -59,4 +60,26 @@ export class ProductService {
     await this.productRepository.delete(id);
   }
 
+  /* Mostrar los productos mas comprados por tallas */
+  async obtenerProductosMasCompradosPorTallas(): Promise<any[]> {
+    const query = `
+      SELECT
+        product.name AS product_name,
+        purchase_detail.quantity,
+        sizes.name AS size_name
+      FROM 
+        product
+      JOIN 
+        purchase_detail ON product.id = purchase_detail.product_id
+      JOIN 
+        purchase ON purchase.id = purchase_detail.purchase_id
+      JOIN 
+        sizes ON product.size_id = sizes.id
+      ORDER BY 
+        purchase_detail.quantity DESC limit 20;
+    `;
+
+    const resultados = await this.dataSource.query(query);
+    return resultados;
+  }
 }

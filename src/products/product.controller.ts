@@ -40,4 +40,9 @@ export class ProductController {
         
       }
     }
+
+    @Post('/mas-comprados')
+    async obtenerProductosMasCompradosPorTallas(): Promise<any[]>{
+      return this.productosService.obtenerProductosMasCompradosPorTallas();  
+    }
 }

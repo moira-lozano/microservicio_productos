@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { Repository, DataSource } from 'typeorm';
 import { PurchaseDetail } from "./purchase_detail.model";
 
 @Injectable()
@@ -8,6 +8,7 @@ export class PurchaseDetailService {
     constructor(
         @InjectRepository(PurchaseDetail) 
         private readonly purchaseDetailsRepository: Repository<PurchaseDetail>,
+        private readonly dataSource: DataSource
       ) {}
 
       async migrarDatosCompra(data: any[]): Promise<void> {
