@@ -76,10 +76,35 @@ export class ProductService {
       JOIN 
         sizes ON product.size_id = sizes.id
       ORDER BY 
-        purchase_detail.quantity DESC limit 20;
+        purchase_detail.quantity DESC limit 50;
     `;
 
     const resultados = await this.dataSource.query(query);
     return resultados;
   }
+   /* Mostrar los productos mas comprados por tallas  ESPECIFICAS*/
+   async obtenerProductosMasCompradosPorTalla(talla: string): Promise<any[]> {
+    const query = `
+      SELECT
+        product.name AS product_name,
+        purchase_detail.quantity,
+        sizes.name AS size_name
+      FROM 
+        product
+      JOIN 
+        purchase_detail ON product.id = purchase_detail.product_id
+      JOIN 
+        purchase ON purchase.id = purchase_detail.purchase_id
+      JOIN 
+        sizes ON product.size_id = sizes.id
+      WHERE 
+        sizes.name = XS
+      ORDER BY 
+        purchase_detail.quantity DESC
+      LIMIT 50;
+    `;
+    const resultados = await this.dataSource.query(query, [talla]);
+    return resultados;
+  }
+
 }

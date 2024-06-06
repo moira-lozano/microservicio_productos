@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Param, Put, Delete, NotFoundException } from '@nestjs/common';
+import { Controller, Get, Post, Body, Param, Put, Delete, NotFoundException, Query } from '@nestjs/common';
 import { ProductService } from "./product.service";
 import { Product } from './product.model';
 
@@ -14,6 +14,14 @@ export class ProductController {
     @Get('/masComprados')
     async obtenerProductosMasCompradosPorTallas(): Promise<any[]>{
       return await this.productosService.obtenerProductosMasCompradosPorTallas();  
+    }
+
+    @Get('/masCompradosPorTalla')
+    async obtenerProductosMasCompradosPorTalla(@Query('talla') talla: string): Promise<any[]> {
+      if (!talla) {
+        throw new NotFoundException("La talla es requerida");
+      }
+      return await this.productosService.obtenerProductosMasCompradosPorTalla(talla);
     }
   
     @Get(':id')
