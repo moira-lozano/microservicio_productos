@@ -18,4 +18,5 @@ export class PurchaseDetailModule {
     total: number = 0;
     purchase_id: number = 0;
     product_id: number = 0;
+
 }

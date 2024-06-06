@@ -9,7 +9,7 @@ export class ProductController {
     @Get('/ver')
     async findAll(): Promise<Product[]> {
       return this.productosService.findAll();
-    }    
+    }  
   
     @Get(':id')
     async findOne(@Param('id') id: number): Promise<Product> {

@@ -20,7 +20,7 @@ export class PurchaseDetailService {
         for (const item of data) {
           const compra_detalle = new PurchaseDetail();
           compra_detalle.quantity = item.quantity;
-          compra_detalle.cost = item.cost;
+          compra_detalle.price = item.price;
           compra_detalle.total = item.total;
           compra_detalle.purchase_id = item.purchase_id;
           compra_detalle.product_id = item.product_id;
