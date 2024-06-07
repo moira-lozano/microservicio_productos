@@ -27,8 +27,6 @@ export class PurchaseService {
         }
       }
 
-
-      
       async findAll(): Promise<Purchase[]> { 
         return await this.purchaseRepository.find();
       }
@@ -45,10 +43,18 @@ export class PurchaseService {
       async update(id: number, purchase: Purchase): Promise<Purchase | null> { 
         await this.purchaseRepository.update(id, purchase);
         const updatedPurchase = await this.purchaseRepository.findOne({ where: { id } });
-        return updatedPurchase || null;
+        if (!updatedPurchase) {
+          throw new Error(`Sale with ID ${id} not found`);
+        }
+        return updatedPurchase;
       }
     
       async remove(id: number): Promise<void> {
         await this.purchaseRepository.delete(id);
       }
+
+      async getAllPurchase(): Promise<Purchase[]> {
+        return await this.purchaseRepository.find({ order: { id: 'ASC' } });
+      }
+    
 }

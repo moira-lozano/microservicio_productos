@@ -14,6 +14,14 @@ import { PurchaseDetailModule } from './purchase_details/purchase_details.module
 import { PurchaseDetail } from "./purchase_details/purchase_detail.model";
 import { PurchaseDetailService } from "./purchase_details/purchase_detail.service";
 import { PurchaseDetailController } from "./purchase_details/purchase_detail.controller";
+import { Promotion } from "./promotions/promotion.model";
+import { PromotionModule } from './promotions/promotion.module';
+import { PromotionService } from './promotions/promotion.service';
+import { PromotionController } from "./promotions/promotion.controller";
+import { ProductProm } from "./product_proms/product_prom.model";
+import { ProductPromModule } from './product_proms/product_prom.module';
+import { ProductPromService } from "./product_proms/product_prom.service";
+import { ProductPromController } from "./product_proms/product_prom.controller";
 import { ConfigModule, ConfigService } from '@nestjs/config';
 
 @Module({
@@ -31,7 +39,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
         password: configService.get('DB_PASSWORD'),
         database: configService.get('DB_DATABASE'),
         //entities: ['dist/src/**/*.entity{.ts,.js}'],
-        entities: [Product, Purchase, PurchaseDetail],
+        entities: [Product, Purchase, PurchaseDetail, Promotion, ProductProm],
         logging: true,
         autoLoadEntities: true,
         synchronize: true,
@@ -42,20 +50,26 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
       }),
       inject: [ConfigService],
     }),
-    TypeOrmModule.forFeature([Product, Purchase, PurchaseDetail]),
+    TypeOrmModule.forFeature([Product, Purchase, PurchaseDetail, Promotion, ProductProm]),
     ProductModule,
     PurchaseModule,
     PurchaseDetailModule,
+    PromotionModule,
+    ProductPromModule,
   ],
   controllers: [
     ProductController,
     PurchaseController,
     PurchaseDetailController,
+    PromotionController,
+    ProductPromController,
   ],
   providers: [
     ProductService,
     PurchaseService,
     PurchaseDetailService,
+    PromotionService,
+    ProductPromService,
     {
       provide: APP_FILTER,
       useClass: NotFoundExceptionFilter,

@@ -54,7 +54,7 @@ export class ProductService {
     const updatedProduct = await this.productRepository.findOne({ where: { id } });
     return updatedProduct || null;
   }
-  
+
 
   async remove(id: number): Promise<void> {
     await this.productRepository.delete(id);
@@ -82,8 +82,8 @@ export class ProductService {
     const resultados = await this.dataSource.query(query);
     return resultados;
   }
-   /* Mostrar los productos mas comprados por tallas  ESPECIFICAS*/
-   async obtenerProductosMasCompradosPorTalla(talla: string): Promise<any[]> {
+  /* Mostrar los productos mas comprados por tallas ESPECIFICAS*/
+  async obtenerProductosMasCompradosPorTalla(talla: string): Promise<any[]> {
     const query = `
       SELECT
         product.name AS product_name,
@@ -104,6 +104,52 @@ export class ProductService {
       LIMIT 50;
     `;
     const resultados = await this.dataSource.query(query, [talla]);
+    return resultados;
+  }
+
+  /* Mostrar los productos mas comprados por fechas*/
+  async obtenerProductosMasCompradosPorFechas(fecha: number): Promise<any[]> {
+    const query = ` SELECT 
+      product.name AS product_name,
+      purchase_detail.quantity,
+      purchase.date AS fecha
+    FROM
+        product
+    JOIN
+      purchase_detail ON product.id = purchase_detail.product_id
+    JOIN
+      purchase ON purchase.id = purchase_detail.purchase_id
+    WHERE
+      purchase.date = $1
+    ORDER BY 
+      purchase_detail.quantity DESC;
+        `;
+    const resultados = await this.dataSource.query(query, [fecha]);
+    return resultados;
+  }
+
+  /* Mostrar los productos mas comprados por año, que este ordenado*/
+  async obtenerProductosMasCompradosPorYear(year: number): Promise<any[]> {
+    const query = `
+      SELECT
+        product.name AS product_name,
+        SUM(purchase_detail.quantity) AS total_quantity,
+        purchase.date AS fecha
+      FROM 
+        product
+      JOIN 
+        purchase_detail ON product.id = purchase_detail.product_id
+      JOIN 
+        purchase ON purchase.id = purchase_detail.purchase_id
+      WHERE 
+        EXTRACT(YEAR FROM purchase.date) = $1
+      GROUP BY
+        product.name, purchase.date
+      ORDER BY 
+        total_quantity DESC
+      LIMIT 20;
+    `;
+    const resultados = await this.dataSource.query(query, [year]);
     return resultados;
   }
 

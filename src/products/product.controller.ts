@@ -16,6 +16,7 @@ export class ProductController {
       return await this.productosService.obtenerProductosMasCompradosPorTallas();  
     }
 
+    /* PARA ESCRIBIR EL ENDPOINT EN EL NAVEGADOR ES EL SGTE: /masCompradosPorTalla?talla=S o cualquier talla de la tabla Sizes*/
     @Get('/masCompradosPorTalla')
     async obtenerProductosMasCompradosPorTalla(@Query('talla') talla: string): Promise<any[]> {
       if (!talla) {
@@ -23,6 +24,23 @@ export class ProductController {
       }
       return await this.productosService.obtenerProductosMasCompradosPorTalla(talla);
     }
+
+    @Get('/masCompradosPorFecha')
+    async obtenerProductosMasCompradosPorFechas(@Query('fecha') fecha: number): Promise<any[]> {
+      if (!fecha) {
+        throw new NotFoundException("El año es requerido");
+      }
+      return await this.productosService.obtenerProductosMasCompradosPorFechas(fecha);
+    }
+    @Get('/masCompradosPorYear')
+    async obtenerProductosMasCompradosPorAno(@Query('year') year: number): Promise<any[]> {
+      if (!year) {
+        throw new NotFoundException("El año es requerido");
+      }
+      return await this.productosService.obtenerProductosMasCompradosPorYear(year);
+    }
+
+
   
     @Get(':id')
     async findOne(@Param('id') id: number): Promise<Product> {
