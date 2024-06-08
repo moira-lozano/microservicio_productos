@@ -1,7 +1,9 @@
 import { Controller, Get, Post, Body, Param, Put, Delete, NotFoundException } from '@nestjs/common';
 import { PromotionService } from "./promotion.service";
 import { Promotion } from "./promotion.model";
+import { ApiTags } from '@nestjs/swagger';
 
+@ApiTags('Promotion')
 @Controller('promocion')
 export class PromotionController {
 

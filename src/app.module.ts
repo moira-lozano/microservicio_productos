@@ -23,6 +23,16 @@ import { ProductPromModule } from './product_proms/product_prom.module';
 import { ProductPromService } from "./product_proms/product_prom.service";
 import { ProductPromController } from "./product_proms/product_prom.controller";
 import { ConfigModule, ConfigService } from '@nestjs/config';
+import { ColorsModule } from './colors/colors.module';
+import { SizeModule } from './size/size.module';
+import { BrandModule } from './brand/brand.module';
+import { ModelsController } from './models/models.controller';
+import { ModelsService } from './models/models.service';
+import { ModelsModule } from './models/models.module';
+import { Color } from './colors/colors.model';
+import { Brand } from './brand/brand.model';
+import { Size } from './size/size.model';
+import { Model } from './models/models.model';
 
 @Module({
   imports: [
@@ -39,7 +49,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
         password: configService.get('DB_PASSWORD'),
         database: configService.get('DB_DATABASE'),
         //entities: ['dist/src/**/*.entity{.ts,.js}'],
-        entities: [Product, Purchase, PurchaseDetail, Promotion, ProductProm],
+        entities: [Product, Purchase, PurchaseDetail, Promotion, ProductProm, Color, Brand, Size, Model],
         logging: true,
         autoLoadEntities: true,
         synchronize: true,
@@ -50,12 +60,16 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
       }),
       inject: [ConfigService],
     }),
-    TypeOrmModule.forFeature([Product, Purchase, PurchaseDetail, Promotion, ProductProm]),
+    TypeOrmModule.forFeature([Product, Purchase, PurchaseDetail, Promotion, ProductProm, Color, Brand, Size, Model]),
     ProductModule,
     PurchaseModule,
     PurchaseDetailModule,
     PromotionModule,
     ProductPromModule,
+    ColorsModule,
+    SizeModule,
+    BrandModule,
+    ModelsModule,
   ],
   controllers: [
     ProductController,
@@ -63,6 +77,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
     PurchaseDetailController,
     PromotionController,
     ProductPromController,
+    ModelsController,
   ],
   providers: [
     ProductService,
@@ -74,6 +89,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
       provide: APP_FILTER,
       useClass: NotFoundExceptionFilter,
     },
+    ModelsService,
   ],
 })
 export class AppModule { }

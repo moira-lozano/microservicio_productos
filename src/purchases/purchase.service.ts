@@ -30,7 +30,7 @@ export class PurchaseService {
       async findAll(): Promise<Purchase[]> { 
         return await this.purchaseRepository.find();
       }
- 
+
       async findOne(id: number): Promise<Purchase | null> {
         const compra = await this.purchaseRepository.findOne({ where: { id } });
         return compra || null;

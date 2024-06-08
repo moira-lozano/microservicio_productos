@@ -1,7 +1,9 @@
 import { Controller, Get, Post, Body, Param, Put, Delete, NotFoundException } from '@nestjs/common';
 import { ProductPromService } from "./product_prom.service";
 import { ProductProm } from "./product_prom.model";
+import { ApiTags } from '@nestjs/swagger';
 
+@ApiTags('Product-Promo')
 @Controller('producto-promo')
 export class ProductPromController {
     constructor (private productPromo: ProductPromService) {}
