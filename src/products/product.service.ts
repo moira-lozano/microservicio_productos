@@ -84,25 +84,27 @@ export class ProductService {
   }
 
   /* Mostrar los productos mas comprados por tallas ESPECIFICAS*/
+  /* /masCompradosPorTalla?talla=M */
   async obtenerProductosMasCompradosPorTalla(talla: string): Promise<any[]> {
     const query = `
-      SELECT
-        product.name AS producto,
-        sizes.name AS talla,
-        purchase_detail.quantity AS cantidad
-      FROM 
-        product
-      JOIN 
-        purchase_detail ON product.id = purchase_detail.product_id
-      JOIN 
-        purchase ON purchase.id = purchase_detail.purchase_id
-      JOIN 
-        sizes ON product.size_id = sizes.id
-      WHERE 
-        sizes.name = $1
-      ORDER BY 
-        purchase_detail.quantity DESC
-      LIMIT 50;
+    SELECT
+      product.name AS producto,
+      product.description AS descripcion,
+      SUM(purchase_detail.quantity) AS cantidad_total
+    FROM 
+      product
+    JOIN 
+      purchase_detail ON product.id = purchase_detail.product_id
+    JOIN 
+      purchase ON purchase.id = purchase_detail.purchase_id
+    JOIN 
+      sizes ON product.size_id = sizes.id
+    WHERE 
+      sizes.name = $1
+    GROUP BY
+      product.name, product.description
+    ORDER BY 
+      cantidad_total DESC;
     `;
     const resultados = await this.dataSource.query(query, [talla]);
     return resultados;
@@ -158,22 +160,23 @@ export class ProductService {
    async obtenerProductosMasCompradosPorMarca(marca: string): Promise<any[]> {
     const query = `
       SELECT
-        product.name AS producto,
-        brands.name AS marca,
-        purchase_detail.quantity AS cantidad
-      FROM 
-        product
-      JOIN 
-        purchase_detail ON product.id = purchase_detail.product_id
-      JOIN 
-        purchase ON purchase.id = purchase_detail.purchase_id
-      JOIN 
-        brands ON product.brand_id = brands.id
-      WHERE 
-        brands.name = $1
-      ORDER BY 
-        purchase_detail.quantity DESC
-      LIMIT 50;
+      product.name AS producto,
+      product.description AS descripcion,
+      SUM(purchase_detail.quantity) AS cantidad_total
+    FROM 
+      product
+    JOIN 
+      purchase_detail ON product.id = purchase_detail.product_id
+    JOIN 
+      purchase ON purchase.id = purchase_detail.purchase_id
+    JOIN 
+      brands ON product.brand_id = brands.id
+    WHERE 
+      brands.name = $1
+    GROUP BY
+      product.name, product.description
+    ORDER BY 
+      cantidad_total DESC;
     `;
     const resultados = await this.dataSource.query(query, [marca]);
     return resultados;
@@ -182,23 +185,24 @@ export class ProductService {
     /* Mostrar los productos mas comprados por modelos ESPECIFICOS*/
     async obtenerProductosMasCompradosPorModelo(modelo: string): Promise<any[]> {
       const query = `
-        SELECT
-          product.name AS producto,
-          models.name AS modelo,
-          purchase_detail.quantity AS cantidad
-        FROM 
-          product
-        JOIN 
-          purchase_detail ON product.id = purchase_detail.product_id
-        JOIN 
-          purchase ON purchase.id = purchase_detail.purchase_id
-        JOIN 
-          models ON product.model_id = models.id
-        WHERE 
-          models.name = $1
-        ORDER BY 
-          purchase_detail.quantity DESC
-        LIMIT 50;
+       SELECT
+      product.name AS producto,
+      product.description AS descripcion,
+      SUM(purchase_detail.quantity) AS cantidad_total
+    FROM 
+      product
+    JOIN 
+      purchase_detail ON product.id = purchase_detail.product_id
+    JOIN 
+      purchase ON purchase.id = purchase_detail.purchase_id
+    JOIN 
+      models ON product.model_id = models.id
+    WHERE 
+      models.name = $1
+    GROUP BY
+      product.name, product.description
+    ORDER BY 
+      cantidad_total DESC;
       `;
       const resultados = await this.dataSource.query(query, [modelo]);
       return resultados;

@@ -51,7 +51,7 @@ export class ProductController {
   @Get('/masCompradosPorModelo')
   async obtenerProductosMasCompradosPorModelo(@Query('modelo') modelo: string): Promise<any[]> {
     if (!modelo) {
-      throw new NotFoundException("La modelo es requerida");
+      throw new NotFoundException("El modelo es requerida");
     }
     return await this.productosService.obtenerProductosMasCompradosPorModelo(modelo);
   }
@@ -61,17 +61,17 @@ export class ProductController {
     return await this.productosService.verProductosEnPromocion();
   }
 
-  @Get('/masCompradosPorMarca')
+  @Get('/porMarca')
   async obtenerTodosProductosMasCompradosPorMarca(): Promise<any[]> {
     return await this.productosService.obtenerTodosLosProductosMasCompradosPorMarca();
   }
 
-  @Get('/masCompradosPorModelo')
+  @Get('/porModelo')
   async obtenerTodosProductosMasCompradosPorModelo(): Promise<any[]> {
     return await this.productosService.obtenerTodosLosProductosMasCompradosPorModelo();
   }
 
-  @Get('/masCompradosPorColor')
+  @Get('/porColor')
   async obtenerTodosProductosMasCompradosPorColor(): Promise<any[]> {
     return await this.productosService.obtenerTodosLosProductosMasCompradosPorColor();
   }
