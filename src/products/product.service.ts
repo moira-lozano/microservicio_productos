@@ -86,9 +86,9 @@ export class ProductService {
   async obtenerProductosMasCompradosPorTalla(talla: string): Promise<any[]> {
     const query = `
       SELECT
-        product.name AS product_name,
-        purchase_detail.quantity,
-        sizes.name AS size_name
+        product.name AS producto,
+        sizes.name AS talla,
+        purchase_detail.quantity AS cantidad
       FROM 
         product
       JOIN 
@@ -153,4 +153,144 @@ export class ProductService {
     return resultados;
   }
 
+   /* Mostrar los productos mas comprados por marcas ESPECIFICAS*/
+   async obtenerProductosMasCompradosPorMarca(marca: string): Promise<any[]> {
+    const query = `
+      SELECT
+        product.name AS producto,
+        brands.name AS marca,
+        purchase_detail.quantity AS cantidad
+      FROM 
+        product
+      JOIN 
+        purchase_detail ON product.id = purchase_detail.product_id
+      JOIN 
+        purchase ON purchase.id = purchase_detail.purchase_id
+      JOIN 
+        brands ON product.brand_id = brands.id
+      WHERE 
+        brands.name = $1
+      ORDER BY 
+        purchase_detail.quantity DESC
+      LIMIT 50;
+    `;
+    const resultados = await this.dataSource.query(query, [marca]);
+    return resultados;
+  }
+
+    /* Mostrar los productos mas comprados por modelos ESPECIFICOS*/
+    async obtenerProductosMasCompradosPorModelo(modelo: string): Promise<any[]> {
+      const query = `
+        SELECT
+          product.name AS producto,
+          models.name AS modelo,
+          purchase_detail.quantity AS cantidad
+        FROM 
+          product
+        JOIN 
+          purchase_detail ON product.id = purchase_detail.product_id
+        JOIN 
+          purchase ON purchase.id = purchase_detail.purchase_id
+        JOIN 
+          models ON product.model_id = models.id
+        WHERE 
+          models.name = $1
+        ORDER BY 
+          purchase_detail.quantity DESC
+        LIMIT 50;
+      `;
+      const resultados = await this.dataSource.query(query, [modelo]);
+      return resultados;
+    }
+
+  //para modificar cantidad y precio en Productos
+  async actualizarStock(id: number, nuevoStock: number, nuevoPrecio: number): Promise<any[]> {
+    const query = `
+      UPDATE
+        Product
+      SET 
+        stock = $2,
+        price = $3
+      WHERE
+        id = $1
+    `;
+    const resultados = await this.dataSource.query(query, [id, nuevoStock, nuevoPrecio]);
+    return resultados;
+  }
+   
+  //Actualizar cantidad y precio en la tabla Compra Detalle (Purchase_Detail)
+  async actualizarQuantityPrice(id: number, quantity: number, price: number): Promise<any[]> {
+    const query = `
+      UPDATE
+        purchase_detail
+      SET 
+        quantity = $2,
+        price = $3
+      WHERE
+        id = $1
+    `;
+    const resultados = await this.dataSource.query(query, [id, quantity, price]);
+    return resultados;
+  }
+
+  //Ver la lista de los productos que están en promoción
+  async verProductosEnPromocion() : Promise<any[]>{
+    const query = `
+    SELECT 
+        product.name AS producto,
+        promotion.description AS promocion
+    FROM (
+    SELECT 
+        product_id,
+        MAX(prom_id) AS prom_id
+    FROM 
+        product_prom
+    GROUP BY 
+        product_id
+) AS latest_promotion
+JOIN 
+    promotion ON latest_promotion.prom_id = promotion.id
+JOIN 
+    product ON latest_promotion.product_id = product.id;
+    `;
+    const resultados = await this.dataSource.query(query);
+    return resultados;
+  }
+
+  //Ver los productos que están en promoción enviando el nombre 
+  async verProductosEnPromoPorNombre(nombreProductoOrId: string): Promise<any[]> {
+    const isNumeric = /^\d+$/.test(nombreProductoOrId); // Verifica si el parámetro es numérico (ID)
+    let query = `
+      SELECT 
+        product.name AS producto,
+        promotion.description AS promocion
+      FROM (
+        SELECT 
+          product_id,
+          MAX(prom_id) AS prom_id
+        FROM 
+          product_prom
+        GROUP BY 
+          product_id
+      ) AS latest_promotion
+      JOIN 
+        promotion ON latest_promotion.prom_id = promotion.id
+      JOIN 
+        product ON latest_promotion.product_id = product.id
+    `;
+  
+    if (isNumeric) {
+      // Si el parámetro es numérico (ID), busca por ID
+      query += ` WHERE product.id = $1`;
+    } else {
+      // Si el parámetro es un nombre de producto, busca por nombre
+      query += ` WHERE product.name = $1`;
+    }
+  
+    const resultados = await this.dataSource.query(query, [nombreProductoOrId]);
+    return resultados;
+  }
+  
+  
+  
 }
