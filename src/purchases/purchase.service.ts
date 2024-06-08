@@ -1,14 +1,17 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository, DataSource } from 'typeorm';
 import { Purchase } from "./purchase.model";
 import { ProductService } from 'src/products/product.service';
+import { PurchaseDetail } from 'src/purchase_details/purchase_detail.model';
 
 @Injectable()
 export class PurchaseService {
     constructor(
         @InjectRepository(Purchase) 
         private readonly purchaseRepository: Repository<Purchase>,
+        @InjectRepository(PurchaseDetail)
+        private readonly purchaseDetailRepository: Repository<PurchaseDetail>
     ) {}
 
     async migrarDatosCompra(data: any[]): Promise<void> {
@@ -57,5 +60,17 @@ export class PurchaseService {
       async getAllPurchase(): Promise<Purchase[]> {
         return await this.purchaseRepository.find({ order: { id: 'ASC' } });
       }
+
+      async findOneWithDetails(id: number): Promise<Purchase | null> {
+        const purchase = await this.purchaseRepository.findOne({
+          where: { id },
+          relations: ['details'], // Trae los detalles relacionados
+        });
     
+        if (!purchase) {
+          throw new NotFoundException(`Purchase with ID ${id} not found`);
+        }
+    
+        return purchase;
+      }
 }

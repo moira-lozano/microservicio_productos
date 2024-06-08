@@ -11,7 +11,8 @@ import { ProductModule } from 'src/products/product.module';
     ProductModule
   ],
   providers: [PurchaseDetailService],
-  controllers: [PurchaseDetailController]
+  controllers: [PurchaseDetailController],
+  exports: [PurchaseDetailService]
 })
 export class PurchaseDetailModule {
     id: number = 0;

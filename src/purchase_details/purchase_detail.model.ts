@@ -1,4 +1,5 @@
-import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
+import { Purchase } from 'src/purchases/purchase.model';
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, JoinColumn } from 'typeorm';
 
 @Entity()
 export class PurchaseDetail {
@@ -21,4 +22,7 @@ export class PurchaseDetail {
    @Column()
    product_id!: number;
 
+   @ManyToOne(() => Purchase, purchase => purchase.details)
+   @JoinColumn({ name: 'purchase_id' })
+   purchase!: Purchase;
 }
