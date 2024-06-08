@@ -2,15 +2,16 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository, DataSource } from 'typeorm';
 import { Purchase } from "./purchase.model";
+import { ProductService } from 'src/products/product.service';
 
 @Injectable()
 export class PurchaseService {
     constructor(
         @InjectRepository(Purchase) 
         private readonly purchaseRepository: Repository<Purchase>,
-      ) {}
+    ) {}
 
-      async migrarDatosCompra(data: any[]): Promise<void> {
+    async migrarDatosCompra(data: any[]): Promise<void> {
 
         if (!Array.isArray(data)) {
           throw new Error('Los datos deben ser un array');

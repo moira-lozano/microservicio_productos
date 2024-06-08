@@ -3,10 +3,12 @@ import { PurchaseDetail } from "./purchase_detail.model";
 import { PurchaseDetailService } from './purchase_detail.service';
 import { PurchaseDetailController } from './purchase_detail.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { ProductModule } from 'src/products/product.module';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([PurchaseDetail])
+    TypeOrmModule.forFeature([PurchaseDetail]),
+    ProductModule
   ],
   providers: [PurchaseDetailService],
   controllers: [PurchaseDetailController]

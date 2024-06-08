@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository, DataSource } from 'typeorm';
 import { Product } from './product.model';
@@ -156,8 +156,8 @@ export class ProductService {
     return resultados;
   }
 
-   /* Mostrar los productos mas comprados por marcas ESPECIFICAS*/
-   async obtenerProductosMasCompradosPorMarca(marca: string): Promise<any[]> {
+  /* Mostrar los productos mas comprados por marcas ESPECIFICAS*/
+  async obtenerProductosMasCompradosPorMarca(marca: string): Promise<any[]> {
     const query = `
       SELECT
       product.name AS producto,
@@ -182,10 +182,10 @@ export class ProductService {
     return resultados;
   }
 
-    /* Mostrar los productos mas comprados por modelos ESPECIFICOS*/
-    async obtenerProductosMasCompradosPorModelo(modelo: string): Promise<any[]> {
-      const query = `
-       SELECT
+  /* Mostrar los productos mas comprados por modelos ESPECIFICOS*/
+  async obtenerProductosMasCompradosPorModelo(modelo: string): Promise<any[]> {
+    const query = `
+      SELECT
       product.name AS producto,
       product.description AS descripcion,
       SUM(purchase_detail.quantity) AS cantidad_total
@@ -204,9 +204,9 @@ export class ProductService {
     ORDER BY 
       cantidad_total DESC;
       `;
-      const resultados = await this.dataSource.query(query, [modelo]);
-      return resultados;
-    }
+    const resultados = await this.dataSource.query(query, [modelo]);
+    return resultados;
+  }
 
   //para modificar cantidad y precio en Productos
   async actualizarStock(id: number, nuevoStock: number, nuevoPrecio: number): Promise<any[]> {
@@ -222,7 +222,7 @@ export class ProductService {
     const resultados = await this.dataSource.query(query, [id, nuevoStock, nuevoPrecio]);
     return resultados;
   }
-   
+
   //Actualizar cantidad y precio en la tabla Compra Detalle (Purchase_Detail)
   async actualizarQuantityPrice(id: number, quantity: number, price: number): Promise<any[]> {
     const query = `
@@ -239,7 +239,7 @@ export class ProductService {
   }
 
   //Ver la lista de los productos que están en promoción
-  async verProductosEnPromocion() : Promise<any[]>{
+  async verProductosEnPromocion(): Promise<any[]> {
     const query = `
     SELECT 
         product.name AS producto,
@@ -252,11 +252,11 @@ export class ProductService {
         product_prom
     GROUP BY 
         product_id
-) AS latest_promotion
-JOIN 
-    promotion ON latest_promotion.prom_id = promotion.id
-JOIN 
-    product ON latest_promotion.product_id = product.id;
+    ) AS latest_promotion
+    JOIN 
+      promotion ON latest_promotion.prom_id = promotion.id
+    JOIN 
+      product ON latest_promotion.product_id = product.id;
     `;
     const resultados = await this.dataSource.query(query);
     return resultados;
@@ -283,7 +283,7 @@ JOIN
       JOIN 
         product ON latest_promotion.product_id = product.id
     `;
-  
+
     if (isNumeric) {
       // Si el parámetro es numérico (ID), busca por ID
       query += ` WHERE product.id = $1`;
@@ -291,14 +291,14 @@ JOIN
       // Si el parámetro es un nombre de producto, busca por nombre
       query += ` WHERE product.name = $1`;
     }
-  
+
     const resultados = await this.dataSource.query(query, [nombreProductoOrId]);
     return resultados;
   }
-  
-    /* Mostrar los productos mas comprados por marca */
-    async obtenerTodosLosProductosMasCompradosPorMarca(): Promise<any[]> {
-      const query = `
+
+  /* Mostrar los productos mas comprados por marca */
+  async obtenerTodosLosProductosMasCompradosPorMarca(): Promise<any[]> {
+    const query = `
         SELECT
           product.name AS producto,
           brands.name AS marca
@@ -314,13 +314,13 @@ JOIN
         ORDER BY 
           purchase_detail.quantity DESC limit 50;
       `;
-      const resultados = await this.dataSource.query(query);
-      return resultados;
-    }
-  
-    /* Mostrar los productos mas comprados por modelo */
-    async obtenerTodosLosProductosMasCompradosPorModelo(): Promise<any[]> {
-      const query = `
+    const resultados = await this.dataSource.query(query);
+    return resultados;
+  }
+
+  /* Mostrar los productos mas comprados por modelo */
+  async obtenerTodosLosProductosMasCompradosPorModelo(): Promise<any[]> {
+    const query = `
         SELECT
           product.name AS producto,
           models.name AS modelo
@@ -336,10 +336,10 @@ JOIN
         ORDER BY 
           purchase_detail.quantity DESC limit 50;
       `;
-      const resultados = await this.dataSource.query(query);
-      return resultados;
-    }
-  
+    const resultados = await this.dataSource.query(query);
+    return resultados;
+  }
+
   /* Mostrar los productos mas comprados por color */
   async obtenerTodosLosProductosMasCompradosPorColor(): Promise<any[]> {
     const query = `
@@ -361,5 +361,13 @@ JOIN
     const resultados = await this.dataSource.query(query);
     return resultados;
   }
-  
+
+  async updateStock(id: number, quantity: number): Promise<void> {
+    const product = await this.productRepository.findOne({ where: { id } });
+    if (!product) {
+      throw new NotFoundException(`Producto con ID ${id} no encontrado`);
+    }
+    product.stock += quantity;
+    await this.productRepository.save(product);
+  }
 }

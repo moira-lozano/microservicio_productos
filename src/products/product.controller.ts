@@ -2,6 +2,7 @@ import { Controller, Get, Post, Body, Param, Put, Delete, NotFoundException, Que
 import { ProductService } from "./product.service";
 import { Product } from './product.model';
 import { ApiTags } from '@nestjs/swagger';
+import { UpdateStockDto } from './dto/update-stock.dto';
 
 @ApiTags('Product')
 @Controller('producto')
@@ -59,7 +60,7 @@ export class ProductController {
   }
 
   @Get('/productosConPromo')
-  async verProductosConPromo(): Promise<any[]>{
+  async verProductosConPromo(): Promise<any[]> {
     return await this.productosService.verProductosEnPromocion();
   }
 
@@ -135,5 +136,23 @@ export class ProductController {
     } catch (error) {
       throw new NotFoundException("This product does not exist");
     }
+  }
+
+  @Put(':id/incrementar-stock')
+  async incrementarStock(
+    @Param('id') id: number,
+    @Body() updateStockDto: UpdateStockDto,
+  ) {
+    await this.productosService.updateStock(id, updateStockDto.quantity);
+    return { message: 'Stock incrementado correctamente' };
+  }
+
+  @Put(':id/decrementar-stock')
+  async decrementarStock(
+    @Param('id') id: number,
+    @Body() updateStockDto: UpdateStockDto,
+  ) {
+    await this.productosService.updateStock(id, -updateStockDto.quantity);
+    return { message: 'Stock decrementado correctamente' };
   }
 }

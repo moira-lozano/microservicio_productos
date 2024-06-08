@@ -10,7 +10,8 @@ import { Product } from './product.model';
     TypeOrmModule.forFeature([Product])
   ],
   controllers: [ProductController],
-  providers: [ProductService]
+  providers: [ProductService],
+  exports: [ProductService]
 })
 export class ProductModule {
   id: number = 0;
