@@ -11,13 +11,28 @@ export class ProductController {
     return this.productosService.findAll();
   }
 
-  @Get('/masComprados')
+  @Get('/masCompradosPorTalla')
   async obtenerProductosMasCompradosPorTallas(): Promise<any[]> {
     return await this.productosService.obtenerProductosMasCompradosPorTallas();
   }
 
+  @Get('/masCompradosPorMarca')
+  async obtenerTodosProductosMasCompradosPorMarca(): Promise<any[]> {
+    return await this.productosService.obtenerTodosLosProductosMasCompradosPorMarca();
+  }
+
+  @Get('/masCompradosPorModelo')
+  async obtenerTodosProductosMasCompradosPorModelo(): Promise<any[]> {
+    return await this.productosService.obtenerTodosLosProductosMasCompradosPorModelo();
+  }
+
+  @Get('/masCompradosPorColor')
+  async obtenerTodosProductosMasCompradosPorColor(): Promise<any[]> {
+    return await this.productosService.obtenerTodosLosProductosMasCompradosPorColor();
+  }
+
   /* PARA ESCRIBIR EL ENDPOINT EN EL NAVEGADOR ES EL SGTE: /masCompradosPorTalla?talla=S o cualquier talla de la tabla Sizes*/
-  @Get('/masCompradosPorTalla')
+  @Get('/porTallaEspecifica')
   async obtenerProductosMasCompradosPorTalla(@Query('talla') talla: string): Promise<any[]> {
     if (!talla) {
       throw new NotFoundException("La talla es requerida");
