@@ -16,21 +16,6 @@ export class ProductController {
     return await this.productosService.obtenerProductosMasCompradosPorTallas();
   }
 
-  @Get('/masCompradosPorMarca')
-  async obtenerTodosProductosMasCompradosPorMarca(): Promise<any[]> {
-    return await this.productosService.obtenerTodosLosProductosMasCompradosPorMarca();
-  }
-
-  @Get('/masCompradosPorModelo')
-  async obtenerTodosProductosMasCompradosPorModelo(): Promise<any[]> {
-    return await this.productosService.obtenerTodosLosProductosMasCompradosPorModelo();
-  }
-
-  @Get('/masCompradosPorColor')
-  async obtenerTodosProductosMasCompradosPorColor(): Promise<any[]> {
-    return await this.productosService.obtenerTodosLosProductosMasCompradosPorColor();
-  }
-
   /* PARA ESCRIBIR EL ENDPOINT EN EL NAVEGADOR ES EL SGTE: /masCompradosPorTalla?talla=S o cualquier talla de la tabla Sizes*/
   @Get('/porTallaEspecifica')
   async obtenerProductosMasCompradosPorTalla(@Query('talla') talla: string): Promise<any[]> {
@@ -75,6 +60,22 @@ export class ProductController {
   async verProductosConPromo(): Promise<any[]>{
     return await this.productosService.verProductosEnPromocion();
   }
+
+  @Get('/masCompradosPorMarca')
+  async obtenerTodosProductosMasCompradosPorMarca(): Promise<any[]> {
+    return await this.productosService.obtenerTodosLosProductosMasCompradosPorMarca();
+  }
+
+  @Get('/masCompradosPorModelo')
+  async obtenerTodosProductosMasCompradosPorModelo(): Promise<any[]> {
+    return await this.productosService.obtenerTodosLosProductosMasCompradosPorModelo();
+  }
+
+  @Get('/masCompradosPorColor')
+  async obtenerTodosProductosMasCompradosPorColor(): Promise<any[]> {
+    return await this.productosService.obtenerTodosLosProductosMasCompradosPorColor();
+  }
+
 
   @Get(':id')
   async findOne(@Param('id') id: number): Promise<Product> {

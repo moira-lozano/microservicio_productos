@@ -83,71 +83,6 @@ export class ProductService {
     return resultados;
   }
 
-   /* Mostrar los productos mas comprados por marca */
-   async obtenerTodosLosProductosMasCompradosPorMarca(): Promise<any[]> {
-    const query = `
-      SELECT
-        product.name AS producto,
-        brands.name AS marca
-        purchase_detail.quantity AS cantidad
-      FROM 
-        product
-      JOIN 
-        purchase_detail ON product.id = purchase_detail.product_id
-      JOIN 
-        purchase ON purchase.id = purchase_detail.purchase_id
-      JOIN 
-        brands ON product.brand_id = brands.id
-      ORDER BY 
-        purchase_detail.quantity DESC limit 50;
-    `;
-    const resultados = await this.dataSource.query(query);
-    return resultados;
-  }
-
-  /* Mostrar los productos mas comprados por modelo */
-  async obtenerTodosLosProductosMasCompradosPorModelo(): Promise<any[]> {
-    const query = `
-      SELECT
-        product.name AS producto,
-        models.name AS modelo
-        purchase_detail.quantity AS cantidad
-      FROM 
-        product
-      JOIN 
-        purchase_detail ON product.id = purchase_detail.product_id
-      JOIN 
-        purchase ON purchase.id = purchase_detail.purchase_id
-      JOIN 
-        models ON product.model_id = models.id
-      ORDER BY 
-        purchase_detail.quantity DESC limit 50;
-    `;
-    const resultados = await this.dataSource.query(query);
-    return resultados;
-  }
-
-/* Mostrar los productos mas comprados por color */
-async obtenerTodosLosProductosMasCompradosPorColor(): Promise<any[]> {
-  const query = `
-    SELECT
-      product.name AS producto,
-      colors.name AS color
-      purchase_detail.quantity AS cantidad
-    FROM 
-      product
-    JOIN 
-      purchase_detail ON product.id = purchase_detail.product_id
-    JOIN 
-      purchase ON purchase.id = purchase_detail.purchase_id
-    JOIN 
-      colors ON product.color_id = colors.id
-    ORDER BY 
-      purchase_detail.quantity DESC limit 50;
-  `;
-  const resultados = await this.dataSource.query(query);
-  return resultados;
-}
   /* Mostrar los productos mas comprados por tallas ESPECIFICAS*/
   async obtenerProductosMasCompradosPorTalla(talla: string): Promise<any[]> {
     const query = `
@@ -357,5 +292,70 @@ JOIN
     return resultados;
   }
   
+    /* Mostrar los productos mas comprados por marca */
+    async obtenerTodosLosProductosMasCompradosPorMarca(): Promise<any[]> {
+      const query = `
+        SELECT
+          product.name AS producto,
+          brands.name AS marca
+          purchase_detail.quantity AS cantidad
+        FROM 
+          product
+        JOIN 
+          purchase_detail ON product.id = purchase_detail.product_id
+        JOIN 
+          purchase ON purchase.id = purchase_detail.purchase_id
+        JOIN 
+          brands ON product.brand_id = brands.id
+        ORDER BY 
+          purchase_detail.quantity DESC limit 50;
+      `;
+      const resultados = await this.dataSource.query(query);
+      return resultados;
+    }
+  
+    /* Mostrar los productos mas comprados por modelo */
+    async obtenerTodosLosProductosMasCompradosPorModelo(): Promise<any[]> {
+      const query = `
+        SELECT
+          product.name AS producto,
+          models.name AS modelo
+          purchase_detail.quantity AS cantidad
+        FROM 
+          product
+        JOIN 
+          purchase_detail ON product.id = purchase_detail.product_id
+        JOIN 
+          purchase ON purchase.id = purchase_detail.purchase_id
+        JOIN 
+          models ON product.model_id = models.id
+        ORDER BY 
+          purchase_detail.quantity DESC limit 50;
+      `;
+      const resultados = await this.dataSource.query(query);
+      return resultados;
+    }
+  
+  /* Mostrar los productos mas comprados por color */
+  async obtenerTodosLosProductosMasCompradosPorColor(): Promise<any[]> {
+    const query = `
+      SELECT
+        product.name AS producto,
+        colors.name AS color
+        purchase_detail.quantity AS cantidad
+      FROM 
+        product
+      JOIN 
+        purchase_detail ON product.id = purchase_detail.product_id
+      JOIN 
+        purchase ON purchase.id = purchase_detail.purchase_id
+      JOIN 
+        colors ON product.color_id = colors.id
+      ORDER BY 
+        purchase_detail.quantity DESC limit 50;
+    `;
+    const resultados = await this.dataSource.query(query);
+    return resultados;
+  }
   
 }
