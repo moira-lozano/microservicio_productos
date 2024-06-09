@@ -6,12 +6,9 @@ import { Product } from './product.model';
 
 
 @Module({
-  imports: [
-    TypeOrmModule.forFeature([Product])
-  ],
-  controllers: [ProductController],
+  imports: [TypeOrmModule.forFeature([Product])],
   providers: [ProductService],
-  exports: [ProductService]
+  exports: [ProductService, TypeOrmModule], 
 })
 export class ProductModule {
   id: number = 0;

@@ -2,6 +2,7 @@ import { Controller, Get, Post, Body, Param, Put, Delete, NotFoundException } fr
 import { PurchaseService } from "./purchase.service";
 import { Purchase } from "./purchase.model";
 import { ApiTags } from '@nestjs/swagger';
+import { CreatePurchaseDto } from './dto/create-purchase.dto';
 
 @ApiTags('Compra')
 @Controller('compra')
@@ -46,5 +47,12 @@ export class PurchaseController {
   @Get(':id/details')
   async findOneWithDetails(@Param('id') id: number): Promise<Purchase | null> {
     return this.compraService.findOneWithDetails(id);
+  }
+
+  @Post('createwithdetails')
+  async createWithDetails(
+    @Body() createPurchaseDto: CreatePurchaseDto
+  ): Promise<Purchase> {
+    return await this.compraService.createWithDetails(createPurchaseDto);
   }
 }

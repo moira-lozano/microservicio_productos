@@ -5,14 +5,17 @@ import { PurchaseController } from './purchase.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { PurchaseDetail } from 'src/purchase_details/purchase_detail.model';
 import { PurchaseDetailModule } from 'src/purchase_details/purchase_details.module';
+import { ProductService } from 'src/products/product.service';
+import { ProductModule } from 'src/products/product.module';
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([Purchase, PurchaseDetail]),
-    PurchaseDetailModule
+    PurchaseDetailModule,
+    ProductModule, 
   ],
   providers: [PurchaseService],
-  controllers: [PurchaseController]
+  controllers: [PurchaseController],
 })
 export class PurchaseModule {
   id: number = 0;
