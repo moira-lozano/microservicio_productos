@@ -63,21 +63,22 @@ export class ProductService {
   /* Mostrar los productos mas comprados por tallas */
   async obtenerProductosMasCompradosPorTallas(): Promise<any[]> {
     const query = `
-     SELECT DISTINCT
-    product.name AS product_name,
-    purchase_detail.quantity,
-    sizes.name AS size_name
-FROM 
-    product
-JOIN 
-    purchase_detail ON product.id = purchase_detail.product_id
-JOIN 
-    purchase ON purchase.id = purchase_detail.purchase_id
-JOIN 
-    sizes ON product.size_id = sizes.id
-ORDER BY 
-    purchase_detail.quantity DESC
-LIMIT 50;
+    SELECT
+      product.name AS producto,
+	    sizes.name AS talla,
+      MAX(purchase_detail.quantity) AS cantidad_vendida
+    FROM 
+        product
+    JOIN 
+        purchase_detail ON product.id = purchase_detail.product_id
+    JOIN 
+        purchase ON purchase.id = purchase_detail.purchase_id
+    JOIN 
+        sizes ON product.size_id = sizes.id
+    GROUP BY
+        product.name, sizes.name
+    ORDER BY 
+        cantidad_vendida DESC;
     `;
 
     const resultados = await this.dataSource.query(query);
@@ -135,23 +136,22 @@ LIMIT 50;
   /* Mostrar los productos mas comprados por año, que este ordenado*/
   async obtenerProductosMasCompradosPorYear(year: number): Promise<any[]> {
     const query = `
-      SELECT
-        product.name AS product_name,
-        SUM(purchase_detail.quantity) AS total_quantity,
+     SELECT
+        product.name AS producto,
+        SUM(purchase_detail.quantity) AS total_cantidad,
         purchase.date AS fecha
       FROM 
-        product
+          product
       JOIN 
-        purchase_detail ON product.id = purchase_detail.product_id
+          purchase_detail ON product.id = purchase_detail.product_id
       JOIN 
-        purchase ON purchase.id = purchase_detail.purchase_id
+          purchase ON purchase.id = purchase_detail.purchase_id
       WHERE 
-        EXTRACT(YEAR FROM purchase.date) = $1
+          EXTRACT(YEAR FROM purchase.date) = $1
       GROUP BY
-        product.name, purchase.date
+          product.name, purchase.date, fecha
       ORDER BY 
-        total_quantity DESC
-      LIMIT 20;
+          fecha ASC, total_cantidad DESC;
     `;
     const resultados = await this.dataSource.query(query, [year]);
     return resultados;
@@ -163,7 +163,8 @@ LIMIT 50;
       SELECT
       product.name AS producto,
       product.description AS descripcion,
-      SUM(purchase_detail.quantity) AS cantidad_total
+      SUM(purchase_detail.quantity) AS cantidad_total,
+	    SUM(purchase_detail.total) AS total
     FROM 
       product
     JOIN 
@@ -302,8 +303,8 @@ LIMIT 50;
     const query = `
         SELECT
           product.name AS producto,
-          brands.name AS marca
-          purchase_detail.quantity AS cantidad
+          brands.name AS marca,
+          MAX(purchase_detail.quantity) AS cantidad_vendida
         FROM 
           product
         JOIN 
@@ -312,8 +313,10 @@ LIMIT 50;
           purchase ON purchase.id = purchase_detail.purchase_id
         JOIN 
           brands ON product.brand_id = brands.id
+	  GROUP BY
+        product.name, brands.name
         ORDER BY 
-          purchase_detail.quantity DESC limit 50;
+          cantidad_vendida DESC;
       `;
     const resultados = await this.dataSource.query(query);
     return resultados;
@@ -324,8 +327,8 @@ LIMIT 50;
     const query = `
         SELECT
           product.name AS producto,
-          models.name AS modelo
-          purchase_detail.quantity AS cantidad
+          models.name AS modelo,
+          MAX(purchase_detail.quantity) AS cantidad_vendida
         FROM 
           product
         JOIN 
@@ -334,8 +337,10 @@ LIMIT 50;
           purchase ON purchase.id = purchase_detail.purchase_id
         JOIN 
           models ON product.model_id = models.id
+        GROUP BY
+        product.name, models.name
         ORDER BY 
-          purchase_detail.quantity DESC limit 50;
+          cantidad_vendida DESC;
       `;
     const resultados = await this.dataSource.query(query);
     return resultados;
@@ -346,8 +351,8 @@ LIMIT 50;
     const query = `
       SELECT
         product.name AS producto,
-        colors.name AS color
-        purchase_detail.quantity AS cantidad
+        colors.name AS color,
+        MAX(purchase_detail.quantity) AS cantidad_vendida
       FROM 
         product
       JOIN 
@@ -356,8 +361,10 @@ LIMIT 50;
         purchase ON purchase.id = purchase_detail.purchase_id
       JOIN 
         colors ON product.color_id = colors.id
-      ORDER BY 
-        purchase_detail.quantity DESC limit 50;
+       GROUP BY
+        product.name, models.name
+        ORDER BY 
+          cantidad_vendida DESC;
     `;
     const resultados = await this.dataSource.query(query);
     return resultados;
