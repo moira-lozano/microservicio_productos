@@ -245,7 +245,7 @@ export class ProductService {
     const query = `
     SELECT 
         product.name AS producto,
-        product_prom.price AS precio,
+        product.price AS precio,
         product_prom.discount AS descuento
     FROM (
         SELECT 
