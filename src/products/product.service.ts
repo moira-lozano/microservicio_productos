@@ -78,7 +78,6 @@ JOIN
 ORDER BY 
     purchase_detail.quantity DESC
 LIMIT 50;
-
     `;
 
     const resultados = await this.dataSource.query(query);
