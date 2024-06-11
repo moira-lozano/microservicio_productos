@@ -2,12 +2,23 @@ import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { DocumentBuilder } from '@nestjs/swagger';
 import { SwaggerModule } from "@nestjs/swagger";
+import { CorsOptions } from '@nestjs/common/interfaces/external/cors-options.interface';
+
 //import * as dotenv from 'dotenv'; // Importa dotenv
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, { cors: true });
   app.setGlobalPrefix('api');
   app.enableCors();
+
+   // Configurar CORS 
+/*    const corsOptions: CorsOptions = {
+    origin: ['http://dashboard-products.railway.internal', 'http://localhost:3000'], // Añade los dominios permitidos
+    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+    credentials: true,
+  };
+  
+  app.enableCors(corsOptions); */
 
   const options = new DocumentBuilder()
     .setTitle('Microservice Product API')
