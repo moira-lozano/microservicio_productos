@@ -129,15 +129,6 @@ export class ProductController {
     return { message: 'Stock y precio actualizados correctamente' };
   }
 
-  @Delete(':id')
-  async remove(@Param('id') id: number): Promise<void> {
-    try {
-      return await this.productosService.remove(id);
-    } catch (error) {
-      throw new NotFoundException("This product does not exist");
-    }
-  }
-
   @Put(':id/incrementar-stock')
   async incrementarStock(
     @Param('id') id: number,
@@ -155,4 +146,14 @@ export class ProductController {
     await this.productosService.updateStock(id, -updateStockDto.quantity);
     return { message: 'Stock decrementado correctamente' };
   }
+
+  @Delete(':id')
+  async remove(@Param('id') id: number): Promise<void> {
+    try {
+      return await this.productosService.remove(id);
+    } catch (error) {
+      throw new NotFoundException("This product does not exist");
+    }
+  }
+
 }
