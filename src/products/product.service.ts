@@ -245,20 +245,25 @@ export class ProductService {
     const query = `
     SELECT 
         product.name AS producto,
-        promotion.description AS promocion
+        promotion.description AS promocion,
+        product_prom.price AS precio,
+        product_prom.discount AS descuento
     FROM (
-    SELECT 
-        product_id,
-        MAX(prom_id) AS prom_id
-    FROM 
-        product_prom
-    GROUP BY 
-        product_id
+        SELECT 
+            product_id,
+            MAX(prom_id) AS prom_id
+        FROM 
+            product_prom
+        GROUP BY 
+            product_id
     ) AS latest_promotion
     JOIN 
-      promotion ON latest_promotion.prom_id = promotion.id
+        promotion ON latest_promotion.prom_id = promotion.id
     JOIN 
-      product ON latest_promotion.product_id = product.id;
+        product ON latest_promotion.product_id = product.id
+    JOIN 
+        product_prom ON latest_promotion.product_id = product_prom.product_id 
+            AND latest_promotion.prom_id = product_prom.prom_id;
     `;
     const resultados = await this.dataSource.query(query);
     return resultados;
