@@ -43,7 +43,7 @@ export class ProductController {
     return await this.productosService.obtenerProductosMasCompradosPorYear(year);
   }
 
-  @Get('/masCompradosPorTalla')
+  @Get('/masCompradosPorMarca')
   async obtenerProductosMasCompradosPorMarca(@Query('marca') marca: string): Promise<any[]> {
     if (!marca) {
       throw new NotFoundException("La marca es requerida");

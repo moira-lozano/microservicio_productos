@@ -362,7 +362,7 @@ export class ProductService {
       JOIN 
         colors ON product.color_id = colors.id
        GROUP BY
-        product.name, models.name
+        product.name, colors.name
         ORDER BY 
           cantidad_vendida DESC;
     `;
