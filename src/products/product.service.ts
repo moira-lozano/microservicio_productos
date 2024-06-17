@@ -39,7 +39,11 @@ export class ProductService {
   }
 
   async findAll(): Promise<Product[]> {
-    return await this.productRepository.find();
+    return await this.productRepository.find({
+      order: {
+        id: 'DESC',
+      },
+    });
   }
 
   async findOne(id: number): Promise<Product | null> {
