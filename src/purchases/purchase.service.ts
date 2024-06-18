@@ -34,7 +34,11 @@ export class PurchaseService {
   }
 
   async findAll(): Promise<Purchase[]> {
-    return await this.purchaseRepository.find();
+    return await this.purchaseRepository.find({
+      order: {
+        id: 'DESC',
+      },
+    });
   }
 
   async findOne(id: number): Promise<Purchase | null> {

@@ -33,6 +33,10 @@ import { Color } from './colors/colors.model';
 import { Brand } from './brand/brand.model';
 import { Size } from './size/size.model';
 import { Model } from './models/models.model';
+import { AwsModule } from './aws/aws.module';
+import { AwsController } from './aws/aws.controller';
+import { AwsService } from './aws/aws.service';
+import { GoogleCloudModule } from './google-cloud/google-cloud.module';
 
 @Module({
   imports: [
@@ -70,6 +74,8 @@ import { Model } from './models/models.model';
     SizeModule,
     BrandModule,
     ModelsModule,
+    AwsModule,
+    GoogleCloudModule,
   ],
   controllers: [
     ProductController,
@@ -78,6 +84,7 @@ import { Model } from './models/models.model';
     PromotionController,
     ProductPromController,
     ModelsController,
+    AwsController
   ],
   providers: [
     ProductService,
@@ -90,6 +97,7 @@ import { Model } from './models/models.model';
       useClass: NotFoundExceptionFilter,
     },
     ModelsService,
+    AwsService
   ],
 })
 export class AppModule { }

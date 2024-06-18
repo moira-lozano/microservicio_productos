@@ -2,6 +2,8 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository, DataSource } from 'typeorm';
 import { Product } from './product.model';
+import * as child_process from 'child_process';
+import axios from 'axios';
 
 @Injectable()
 export class ProductService {
@@ -37,7 +39,11 @@ export class ProductService {
   }
 
   async findAll(): Promise<Product[]> {
-    return await this.productRepository.find();
+    return await this.productRepository.find({
+      order: {
+        id: 'DESC',
+      },
+    });
   }
 
   async findOne(id: number): Promise<Product | null> {
@@ -381,5 +387,71 @@ export class ProductService {
     }
     product.stock += quantity;
     await this.productRepository.save(product);
+  }
+
+  async getProductImageKeys(): Promise<string[]> {
+    const products = await this.productRepository.find({
+      select: ['image'], // Selecciona solo el campo de la clave de la imagen
+    });
+
+    return products.map(product => product.image);
+  }
+
+  async getAccessToken(): Promise<string> {
+    return new Promise((resolve, reject) => {
+      child_process.exec('gcloud auth application-default print-access-token', (error, stdout, stderr) => {
+        if (error) {
+          reject(`Error obtaining access token: ${stderr}`);
+        }
+        resolve(stdout.trim());
+      });
+    });
+  }
+
+  async findProductsByLabels(labels: string[]): Promise<Product[]> {
+    console.log('labels products: ', labels)
+    const products = await this.findAll();
+    const matchedProducts = [];
+
+    const token = await this.getAccessToken();
+    console.log('apikery', token)
+
+    for (const product of products) {
+      const response = await axios.post(
+        `https://vision.googleapis.com/v1/images:annotate`,
+        {
+          requests: [
+            {
+              image: { source: { imageUri: product.image } },
+              features: [{ type: 'LABEL_DETECTION' }]
+            }
+          ]
+        },
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+          }
+        }
+      );
+
+      if (response.status === 200) {
+        const productLabels = response.data.responses[0].labelAnnotations.filter(
+          (label: any) => label.score >= 0.95
+        ).map(
+          (label: any) => label.description
+        );
+
+        // Cuenta las coincidencias
+        const matchingLabelsCount = labels.filter(label => productLabels.includes(label)).length;
+        console.log('matchingLabelsCount', matchingLabelsCount)
+
+        // Solo agrega productos con más de una coincidencia
+        if (matchingLabelsCount > 1) {
+          matchedProducts.push(product);
+        }
+      }
+    }
+    return matchedProducts;
   }
 }
